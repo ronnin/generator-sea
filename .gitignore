@@ -1,0 +1,8 @@
+node_modules/
+temp/
+.idea/
+*.iml
+.classpath
+.project
+.settings/
+*.log
