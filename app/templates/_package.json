@@ -1,0 +1,27 @@
+{
+  "family": "<%= family %>",
+  "name": "<%= name %>",
+  "version": "<%= version %>",
+  "description": "<%= description %>",
+  "author": "<%= author %>",
+  "maintainer": [
+    "<%= author %>"
+  ],
+  "repository": {
+    "type": "<%= repositoryType %>",
+    "url": "<%= repositoryUri %>"
+  },
+  "homepage": "<%= homePage %>",
+  "spm": {
+    "source": "src",
+    "output": ["<%= name %>.js"],
+    "include": "relative",
+    "alias": {},
+    "devAlias": {},
+    "engines:": {
+      "seajs": "<%= seajsVersion %>"
+    }
+  },
+  "licenses": "<%= licenses.join(',') %>",
+  "keywords": []
+}
