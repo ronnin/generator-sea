@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Tests (by mocha)</title>
+  <script src="../sea-modules/seajs/seajs/<%= seajsVersion %>/sea.js"></script>
+  <script>
+    seajs.config({
+      alias: {
+        // TODO: fill the alias
+      }
+    });
+  </script>
+</head>
+<body>
+  <script>
+    seajs.use(['mocha', 'expect'], function(mocha, expect){
+      mocha.checkLeaks();
+      mocha.run();
+    });
+  </script>
+</body>
+</html>

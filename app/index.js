@@ -4,15 +4,16 @@ var path = require('path');
 var yeoman = require('yeoman-generator');
 var chalk = require('chalk');
 var semver = require('semver');
+var async = require('async');
 
 
 var SeajsGenerator = yeoman.generators.Base.extend({
   init: function () {
-    this.pkg = require('../package.json');
+    //this.pkg = require('../package.json');
 
     this.on('end', function () {
       if (!this.options['skip-install']) {
-        this.installDependencies();
+        this.runInstall('oldman');
       }
     });
   },
@@ -25,6 +26,24 @@ var SeajsGenerator = yeoman.generators.Base.extend({
 
     // replace it with a short and sweet description of your generator
     this.log(chalk.magenta('You\'re using the fantastic Seajs generator.'));
+
+    var alias = [
+      { name: 'jquery/jquery', checked: true, alias: '$' },
+      { name: 'gallery/es5-safe', checked: true, alias: 'es5' },
+      { name: 'gallery/placeholders', alias: 'placeholder' },
+      { name: 'gallery/ztree', alias: 'ztree' },
+      { name: 'jquery-plugin/form', alias: 'ajaxForm' },
+      { name: 'gallery/store', alias: 'store' },
+      { name: 'jquery/select2', alias: 'select2' },
+      { name: 'gallery/moment', alias: 'moment' },
+      { name: 'gallery/numeral', alias: 'numeral' },
+      { name: 'gallery/mathjs', alias: 'math' },
+      { name: 'gallery/zeroclipboard', alias: 'clipboard' },
+      { name: 'gallery/keymaster', alias: 'keyMaster' },
+      { name: 'lodash/lodash', alias: '_' },
+      { name: 'async/async', alias: 'async' },
+      { name: 'sockjs/sockjs-client', alias: 'sockjs' }
+    ];
 
     var currentDir = path.basename(process.cwd());
     var namesOfCurrentDir = currentDir.split('-');
@@ -75,28 +94,15 @@ var SeajsGenerator = yeoman.generators.Base.extend({
       name: 'seajsVersion',
       type: 'input',
       message: 'version of SeaJs?',
-      'default': '2.1.1'
+      'default': '2.2.1'
     }, {
       name: 'alias',
       type: 'checkbox',
       message: 'select modules, this module depends:',
-      choices: [
-        { name: 'jquery/jquery', checked: true },
-        { name: 'gallery/es5-safe', checked: true },
-        'gallery/placeholders',
-        'gallery/ztree',
-        'jquery-plugin/form',
-        'gallery/store',
-        'jquery/select2',
-        'gallery/moment',
-        'gallery/numeral',
-        'gallery/mathjs',
-        'gallery/zeroclipboard',
-        'gallery/keymaster',
-        'lodash/lodash',
-        'async/async',
-        'sockjs/sockjs-client'
-      ]
+      choices: alias,
+      filter: function(input) {
+        return input;
+      }
     }, {
       name: 'description',
       type: 'input',
@@ -129,7 +135,6 @@ var SeajsGenerator = yeoman.generators.Base.extend({
       type: 'input',
       message: 'Home Page?',
       'default': function(answers) {
-        console.log(answers['repositoryUri'], /^\w+github\.com\w+$/.test(answers['repositoryUri']));
         if (/^.+github\.com.+$/.test(answers['repositoryUri'])) {
           return answers['repositoryUri'].replace(/\.git$/, '').replace(/^git:/, 'https:');
         }
@@ -153,6 +158,7 @@ var SeajsGenerator = yeoman.generators.Base.extend({
     this.mkdir('test');
 
     this.template('_package.json', 'package.json');
+    this.template('src/_module.js', 'src/' + this.name + '.js');
   },
 
   projectfiles: function () {
